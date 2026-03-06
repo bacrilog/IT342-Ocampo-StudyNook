@@ -1,0 +1,131 @@
+/* ===== Auth Page (shared by Login & Register) ===== */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* ===== Card ===== */
+
+.auth-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 44px 32px;
+  width: 380px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.login-card {
+  border: 3px solid #3b82f6;
+}
+
+/* ===== Title ===== */
+
+.auth-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 28px;
+}
+
+/* ===== Form ===== */
+
+.auth-card .form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-card label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="text"] {
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.auth-card input:focus {
+  border-color: #7B1113;
+  box-shadow: 0 0 0 2px rgba(123, 17, 19, 0.1);
+}
+
+/* ===== Buttons ===== */
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  background-color: #7B1113;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-login:hover:not(:disabled) {
+  background-color: #5e0d0f;
+}
+
+.btn-login:disabled {
+  background-color: #c9a0a1;
+  cursor: not-allowed;
+}
+
+/* ===== Navigation link ===== */
+
+.auth-switch {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-link {
+  color: #7B1113;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== Errors ===== */
+
+.error-message {
+  background-color: #fef2f2;
+  color: #991b1b;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  border: 1px solid #fecaca;
+  font-size: 14px;
+}
+
+.error-text {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+}

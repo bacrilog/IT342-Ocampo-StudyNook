@@ -1,0 +1,156 @@
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.dashboard-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 48px 36px;
+  width: 440px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.dashboard-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #7B1113;
+}
+
+.user-info {
+  background-color: #faf5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  border: 1px solid #e8d5d5;
+}
+
+.user-info h2 {
+  color: #7B1113;
+  margin: 0 0 14px;
+  font-size: 20px;
+}
+
+.user-info p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.user-info strong {
+  color: #333;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 14px;
+  background-color: #7B1113;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #5e0d0f;
+}
+
+/* ===== Logout Confirmation Modal ===== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px 36px 28px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-card h3 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #7B1113;
+}
+
+.modal-card p {
+  margin: 0 0 24px;
+  font-size: 15px;
+  color: #555;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #e5e7eb;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-modal-cancel:hover {
+  background: #d1d5db;
+}
+
+.btn-modal-confirm {
+  flex: 1;
+  padding: 12px;
+  background: #7B1113;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-modal-confirm:hover {
+  background: #5e0d0f;
+}

@@ -1,0 +1,86 @@
+/* ===== Register-specific styles ===== */
+/* (Base .auth-page / .auth-card rules come from Login.css) */
+
+.register-card {
+  border: none;
+  padding: 36px 44px 28px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.register-title {
+  color: #7B1113;
+}
+
+/* ===== Role selector ===== */
+
+.role-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.role-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+}
+
+.role-option input[type="radio"] {
+  accent-color: #7B1113;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ===== Side-by-side name fields ===== */
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.form-group.half {
+  flex: 1;
+  min-width: 0;
+}
+
+.form-group.half input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== Register button ===== */
+
+.btn-register {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  background-color: #7B1113;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-register:hover:not(:disabled) {
+  background-color: #5e0d0f;
+}
+
+.btn-register:disabled {
+  background-color: #c9a0a1;
+  cursor: not-allowed;
+}
