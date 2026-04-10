@@ -1,62 +1,63 @@
 package edu.cit.ocampo.studynook.config;
 
-import edu.cit.ocampo.studynook.entity.Room;
-import edu.cit.ocampo.studynook.repository.RoomRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import edu.cit.ocampo.studynook.entity.Room;
+import edu.cit.ocampo.studynook.entity.User;
+import edu.cit.ocampo.studynook.repository.RoomRepository;
+import edu.cit.ocampo.studynook.repository.UserRepository;
 
 @Configuration
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner seedRooms(RoomRepository roomRepository) {
+    CommandLineRunner seedRooms(
+            RoomRepository roomRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         return args -> {
-            long count = roomRepository.count();
+            // Ensure default superuser credentials are always present.
+            Optional<User> adminOpt = userRepository.findByEmail("admin@gmail.com");
+            User admin = adminOpt.orElseGet(User::new);
+            admin.setName("System Administrator");
+            admin.setEmail("admin@gmail.com");
+            admin.setRole("ADMIN");
+            admin.setPasswordHash(passwordEncoder.encode("123456"));
+            if (admin.getCreatedAt() == null) {
+                admin.setCreatedAt(LocalDateTime.now());
+            }
+            userRepository.save(admin);
 
-            if (count >= 4) {
+            // Seed default rooms once when the catalog is empty.
+            if (roomRepository.count() > 0) {
                 return;
             }
 
-            if (count == 0) {
-                Room discussionA = new Room();
-                discussionA.setName("Discussion Room A");
-                discussionA.setType("Discussion Room");
-                discussionA.setCapacity(5);
-                discussionA.setStatus("Available");
-
-                Room discussionB = new Room();
-                discussionB.setName("Discussion Room B");
-                discussionB.setType("Discussion Room");
-                discussionB.setCapacity(5);
-                discussionB.setStatus("Available");
-
-                Room labHub1 = new Room();
-                labHub1.setName("Laboratory Hub 1");
-                labHub1.setType("Laboratory Hub");
-                labHub1.setCapacity(4);
-                labHub1.setStatus("Available");
-
-                Room labHub2 = new Room();
-                labHub2.setName("Laboratory Hub 3");
-                labHub2.setType("Laboratory Hub");
-                labHub2.setCapacity(4);
-                labHub2.setStatus("Available");
-
-                roomRepository.save(discussionA);
-                roomRepository.save(discussionB);
-                roomRepository.save(labHub1);
-                roomRepository.save(labHub2);
-                return;
+            // Create Laboratory Hubs 1-3
+            for (int i = 1; i <= 3; i++) {
+                Room room = new Room();
+                room.setName("Laboratory Hub " + i);
+                room.setType("Laboratory Hub");
+                room.setCapacity(4);
+                room.setStatus("Available");
+                roomRepository.save(room);
             }
 
-            while (roomRepository.count() < 4) {
-                Room extra = new Room();
-                extra.setName("Discussion Room " + roomRepository.count());
-                extra.setType("Discussion Room");
-                extra.setCapacity(5);
-                extra.setStatus("Available");
-                roomRepository.save(extra);
+            // Create Discussion Rooms 1-3
+            for (int i = 1; i <= 3; i++) {
+                Room room = new Room();
+                room.setName("Discussion Room " + i);
+                room.setType("Discussion Room");
+                room.setCapacity(5);
+                room.setStatus("Available");
+                roomRepository.save(room);
             }
         };
     }

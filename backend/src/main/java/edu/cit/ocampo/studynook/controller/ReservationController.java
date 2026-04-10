@@ -1,13 +1,5 @@
 package edu.cit.ocampo.studynook.controller;
 
-import edu.cit.ocampo.studynook.entity.Reservation;
-import edu.cit.ocampo.studynook.entity.Room;
-import edu.cit.ocampo.studynook.repository.ReservationRepository;
-import edu.cit.ocampo.studynook.service.ReservationService;
-import edu.cit.ocampo.studynook.service.RoomService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,6 +7,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.cit.ocampo.studynook.entity.Reservation;
+import edu.cit.ocampo.studynook.entity.Room;
+import edu.cit.ocampo.studynook.repository.ReservationRepository;
+import edu.cit.ocampo.studynook.service.ReservationService;
+import edu.cit.ocampo.studynook.service.RoomService;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -103,19 +111,6 @@ public class ReservationController {
                 return ResponseEntity.badRequest().body(Map.of("error", "Room is currently not available for booking"));
             }
 
-            List<Reservation> activeRoomReservations = reservationRepository.findByRoom_IdAndStatus(roomId, "Booked");
-            long overlappingCount = activeRoomReservations.stream()
-                    .filter(r -> startTime.isBefore(r.getEndTime()) && endTime.isAfter(r.getStartTime()))
-                    .count();
-
-            if ("Discussion Room".equalsIgnoreCase(room.getType()) && overlappingCount > 0) {
-                return ResponseEntity.status(409).body(Map.of("error", "This discussion room is already booked for that time slot"));
-            }
-
-            if ("Laboratory Hub".equalsIgnoreCase(room.getType()) && overlappingCount >= room.getCapacity()) {
-                return ResponseEntity.status(409).body(Map.of("error", "Laboratory hub reached capacity for that time slot"));
-            }
-
             Reservation reservation = new Reservation();
             reservation.setRoom(room);
             reservation.setUserEmail(userEmail);
@@ -123,9 +118,15 @@ public class ReservationController {
             reservation.setEndTime(endTime);
             reservation.setStatus("Booked");
 
-            return ResponseEntity.status(201).body(reservationService.saveReservation(reservation));
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid reservation payload"));
+            // Use transactional method to prevent race conditions (moves all checks to service with locking)
+            Reservation savedReservation = reservationService.createReservation(reservation);
+            return ResponseEntity.status(201).body(savedReservation);
+        } catch (Exception ex) {
+            String errorMsg = ex.getMessage();
+            if (errorMsg.contains("already booked") || errorMsg.contains("capacity")) {
+                return ResponseEntity.status(409).body(Map.of("error", errorMsg));
+            }
+            return ResponseEntity.badRequest().body(Map.of("error", errorMsg != null ? errorMsg : "Invalid reservation payload"));
         }
     }
 
@@ -137,9 +138,20 @@ public class ReservationController {
         }
 
         Reservation reservation = resOpt.get();
-        reservation.setStatus("Cancelled");
-        reservationService.saveReservation(reservation);
+        if (!"Booked".equalsIgnoreCase(reservation.getStatus())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Only booked reservations can be cancelled"));
+        }
 
-        return ResponseEntity.ok(Map.of("message", "Reservation cancelled successfully"));
+        if (reservation.getStartTime() == null || !reservation.getStartTime().isAfter(LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Only upcoming reservations can be cancelled"));
+        }
+
+        reservation.setStatus("Cancelled");
+        Reservation updatedReservation = reservationService.saveReservation(reservation);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Reservation cancelled successfully",
+                "reservation", updatedReservation
+        ));
     }
 }
