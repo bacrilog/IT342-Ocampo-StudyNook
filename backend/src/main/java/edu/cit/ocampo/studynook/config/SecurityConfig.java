@@ -21,6 +21,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Allow React
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Allow Login/Register
+                .requestMatchers("/api/rooms/**", "/api/reservations/**").permitAll() // Phase 3 core feature APIs
                 .anyRequest().authenticated() // Protect everything else
             )
             .httpBasic(basic -> basic.disable())
