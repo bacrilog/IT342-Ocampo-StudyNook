@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import edu.cit.ocampo.studynook.entity.Room;
-import edu.cit.ocampo.studynook.entity.User;
-import edu.cit.ocampo.studynook.repository.RoomRepository;
-import edu.cit.ocampo.studynook.repository.UserRepository;
+import edu.cit.ocampo.studynook.features.auth.User;
+import edu.cit.ocampo.studynook.features.auth.UserRepository;
+import edu.cit.ocampo.studynook.features.room.Room;
+import edu.cit.ocampo.studynook.features.room.RoomRepository;
 
 @Configuration
 public class DataInitializer {

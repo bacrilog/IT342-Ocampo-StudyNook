@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Register from './Register';
-import Login from './Login';
-import Dashboard from './Dashboard';
+import Register from './features/auth/Register';
+import Login from './features/auth/Login';
+import Dashboard from './features/dashboard/Dashboard';
 import './App.css';
 
 function App() {
